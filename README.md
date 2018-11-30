@@ -7,7 +7,7 @@ and more information about the installation can be found in the `Quick Start Gui
 
 
 `ROI.plugin.gurobi` was tested on `Debian GNU/Linux 8 (jessie)` with the
-`gurobi` versions `6.5` and `7`.    
+`gurobi` version `8`.   
 
 
 After `gurobi` and `gurobi` (**R** package) are installed simply use
