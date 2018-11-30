@@ -16,7 +16,7 @@ install.packages("ROI.plugin.gurobi", repos="http://R-Forge.R-project.org")
 ## or (recommended version)
 remotes:::install_svn("svn://svn.r-forge.r-project.org/svnroot/roi/pkg/ROI.plugin.gurobi")
 ## or
-remotes:::install_github("fl0sch/ROI.plugin.gurobi")
+remotes:::install_github("FlorianSchwendinger/ROI.plugin.gurobi")
 ```
 to install `ROI.plugin.gurobi`.
 
