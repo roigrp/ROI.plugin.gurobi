@@ -20,3 +20,5 @@ to install `ROI.plugin.gurobi`.
 An overview on all the available Gurobi parameters can be found at
 [`https://www.gurobi.com/documentation/9.1/refman/parameters.html#sec:Parameters`](https://www.gurobi.com/documentation/9.1/refman/parameters.html#sec:Parameters).
 
+## Usage
+Several usage examples can be found in the **vignettes** folder.
