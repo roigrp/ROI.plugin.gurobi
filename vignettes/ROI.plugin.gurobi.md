@@ -95,13 +95,14 @@ solution(sol)
 
 ## Quadratic programming
 ### Quadratic objective with linear constraints (QP)
-
 $$
-\begin{array}
-\text{minimize}   & & x_1 & + & 2x_2 & + & 3x_3 &  +   & \frac{1}{2} (x_1^2 + x_2^2 + x_3^2)  \\
-\text{subject to} & & x_1 & + &  x_2 &   &      & \geq & 1 \nonumber \\
-                  & &     &   &  x_2 & + &  x_3 & \geq & 2 \nonumber \\
-                  & & x_1 &   &      & + &  x_3 & \geq & 3 \nonumber \\
+\text{minimize} \ \ x_1 + 2x_2 + 3x_3 +  \frac{1}{2} (x_1^2 + x_2^2 + x_3^2)
+$$
+$$
+\begin{array}{rrrrrrrr}
+\text{subject to} & x_1 & + &  x_2 &   &      & \geq & 1 \\
+                  &     &   &  x_2 & + &  x_3 & \geq & 2 \\
+                  & x_1 &   &      & + &  x_3 & \geq & 3
 \end{array}
 $$
 
@@ -212,6 +213,7 @@ solution(sol)
 ```
 
 #### Binding constraints
+The check below shows that all three constraints are binding.
 
 ```r
 s <- solution(sol)
@@ -221,3 +223,4 @@ sapply(as.F_constraint(constraints(qcqp))$F, function(fun) fun(s))
 ```
 ## [1] 4 3 2
 ```
+
