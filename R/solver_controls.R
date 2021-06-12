@@ -1,4 +1,6 @@
 .add_controls <- function(solver) {
+    ROI_plugin_register_solver_control(solver, "nsol_max", "X")
+
     # Termination
     ROI_plugin_register_solver_control(solver, "BarIterLimit"  , "X") # Barrier iteration limit
     ROI_plugin_register_solver_control(solver, "BestBdStop"    , "X") # Best objective bound to stop

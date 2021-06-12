@@ -92,6 +92,35 @@ solution(sol)
 ## 7.0 4.5 0.0
 ```
 
+## Multiple soltutions MILP
+Let's try to better understand the attributes related to solution pools. Consider again a minimization problem where the parameter settings PoolSearchMode=2 and PoolSolutions=10 have been used.
+
+
+```r
+library("slam")
+op <- OP(c(-1, -1, -1, -1, -99))
+mat <- simple_triplet_matrix(rep(1:3, 2), c(c(1, 3, 4), c(2, 4, 5)), rep(1, 6))
+constraints(op) <- L_constraint(mat, dir = leq(3), rhs = rep.int(1, 3))
+types(op) <- rep("B", length(objective(op)))
+(x <- ROI_solve(op, "gurobi", nsol_max = 5L))
+```
+
+```
+## 2 optimal solutions found.
+## The objective value is: -1.010000e+02
+```
+
+```r
+solution(x)
+```
+
+```
+## [[1]]
+## [1] 1 0 1 0 1
+## 
+## [[2]]
+## [1] 0 1 1 0 1
+```
 
 ## Quadratic programming
 ### Quadratic objective with linear constraints (QP)

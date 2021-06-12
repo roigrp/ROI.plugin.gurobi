@@ -12,7 +12,7 @@ and more information about the installation can be found in the `Quick Start Gui
 
 After `gurobi` and `gurobi` (**R** package) are installed simply use
 ```r
-remotes:::install_github("R-Optimization-Infrastructure/ROI.plugin.gurobi")
+remotes:::install_github("roigrp/ROI.plugin.gurobi")
 ```
 to install `ROI.plugin.gurobi`.
 

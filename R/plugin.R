@@ -20,7 +20,8 @@ gurobi_status_code <- list(
     INTERRUPTED = 11L,
     NUMERIC = 12L,
     SUBOPTIMAL = 13L,
-    INPROGRESS = 14L
+    INPROGRESS = 14L,
+    USER_OBJ_LIMIT = 15L
 )
 
 ## get_lb
@@ -61,12 +62,52 @@ is.LP <- function(x) {
       & inherits( objective(x), "L_objective" ) )
 }
 
-solve_OP <- function(x, control) {
-    if ( is.LP(x) )
+solve_OP <- function(x, control = list()) {
+    multiple_solutions <- FALSE
+    if ("nsol_max" %in% names(control)) {
+        stopifnot(is.numeric(control$nsol_max), lengths(is.numeric(control$nsol_max)) == 1L)
+        nsol_max <- control$nsol_max
+        control$nsol_max <- NULL
+        if (isTRUE(nsol_max > 1L)) {
+            multiple_solutions <- TRUE
+            control[["PoolSearchMode"]] <- 2L
+            if (is.finite(nsol_max)) {
+                control[["PoolSolutions"]] <- as.integer(nsol_max)
+            }
+        }
+    }
+
+    if ( is.LP(x) ) {
         out <- .solve_LP( x, control )
-    else
+    } else {
         out <- .solve_QP( x, control )
-    out
+    }
+
+    if (multiple_solutions) {
+        delta <- abs(out$objval - sapply(out$pool, "[[", "objval"))
+        pool_gap <- if (is.null(control$PoolGap)) 1e-5 else control$PoolGap
+        is_optimal <- (delta / abs(out$objval)) < pool_gap
+        pool <- out$pool[is_optimal]
+        sol <- ROI_plugin_canonicalize_solution(solution = out$x,
+                                                optimum  = out$objval,
+                                                status   = gurobi_status_code[[out$status]],
+                                                solver   = "gurobi",
+                                                message  = out)
+        solutions <- vector("list", length(pool))
+        for (i in seq_along(solutions)) {
+            sol[["solution"]] <- pool[[i]][["xn"]]
+            sol[["optimum"]] <- pool[[i]][["objval"]]
+            solutions[[i]] <- sol
+        }
+        class(solutions) <- c("lpsolve_solution_set", "OP_solution_set")
+        return(solutions)
+    } else {
+        ROI_plugin_canonicalize_solution(solution = out$x,
+                                         optimum  = out$objval,
+                                         status   = gurobi_status_code[[out$status]],
+                                         solver   = "gurobi",
+                                         message  = out )
+    }
 }
 
 canonicalize_control <- function(x) {
@@ -75,8 +116,6 @@ canonicalize_control <- function(x) {
 }
 
 .solve_LP <- function(x, control) {
-    solver <- ROI_plugin_get_solver_name( getPackageName() )
-
     model <- list()
     ## objective
     model$obj <- as.vector(terms(objective(x))[["L"]])
@@ -96,13 +135,7 @@ canonicalize_control <- function(x) {
     ## maximum
     model$modelsense <- if(x$maximum) "max" else "min"
 
-    out <- gurobi(model, canonicalize_control(control))
-
-    ROI_plugin_canonicalize_solution(  solution = out$x,
-                                       optimum  = out$objval,
-                                       status   = gurobi_status_code[[out$status]],
-                                       solver   = solver,
-                                       message  = out )
+    gurobi(model, canonicalize_control(control))
 }
 
 .emtpy_Q <- function(x) {
@@ -116,8 +149,6 @@ canonicalize_control <- function(x) {
 }
 
 .solve_QP <- function(x, control = list()) {
-    solver <- ROI_plugin_get_solver_name( getPackageName() )
-
     model <- list()
     ## objective
     model$Q <- terms(objective(x))[['Q']] / 2
@@ -179,12 +210,6 @@ canonicalize_control <- function(x) {
     ## maximum
     model$modelsense <- if(x$maximum) "max" else "min"
     
-    out <- gurobi(model, canonicalize_control(control))
-
-    ROI_plugin_canonicalize_solution( solution = out$x,
-                                       optimum = out$objval,
-                                       status = gurobi_status_code[[out$status]],
-                                       solver = solver,
-                                       message = out )
+    gurobi(model, canonicalize_control(control))
 }
 

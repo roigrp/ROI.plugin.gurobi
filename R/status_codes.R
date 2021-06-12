@@ -1,5 +1,5 @@
 .add_status_codes <- function() {
-    solver <- ROI_plugin_get_solver_name( getPackageName() )
+    solver <- "gurobi"
     ROI_plugin_add_status_code_to_db(solver,
                               1L,
                               "LOADED",
