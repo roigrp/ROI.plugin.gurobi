@@ -1,5 +1,5 @@
 .add_status_codes <- function() {
-    solver <- ROI_plugin_get_solver_name( getPackageName() )
+    solver <- "gurobi"
     ROI_plugin_add_status_code_to_db(solver,
                               1L,
                               "LOADED",
@@ -71,6 +71,10 @@
                               "INPROGRESS",
                               "An asynchronous optimization call was made, but the associated optimization run is not yet complete."
                               )
-
+    ROI_plugin_add_status_code_to_db(solver,
+                              15L,
+                              "USER_OBJ_LIMIT",
+                              "User specified an objective limit (a bound on either the best objective or the best bound), and that limit has been reached."
+                              )
     invisible(TRUE)
 }
