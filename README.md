@@ -6,18 +6,17 @@ and more information about the installation can be found in the `Quick Start Gui
 [https://www.gurobi.com/documentation](https://www.gurobi.com/documentation).    
 
 
-`ROI.plugin.gurobi` was tested on `Debian GNU/Linux 8 (jessie)` with the
-`gurobi` version `8`.   
+`ROI.plugin.gurobi` was tested on `Debian GNU/Linux 10 (buster)` with the
+`gurobi` version `9`.   
 
 
 After `gurobi` and `gurobi` (**R** package) are installed simply use
 ```r
-install.packages("ROI.plugin.gurobi", repos="http://R-Forge.R-project.org")
-## or (recommended version)
-remotes:::install_svn("svn://svn.r-forge.r-project.org/svnroot/roi/pkg/ROI.plugin.gurobi")
-## or
-remotes:::install_github("FlorianSchwendinger/ROI.plugin.gurobi")
+remotes:::install_github("R-Optimization-Infrastructure/ROI.plugin.gurobi")
 ```
 to install `ROI.plugin.gurobi`.
 
+## Control Parameters
+An overview on all the available Gurobi parameters can be found at
+[`https://www.gurobi.com/documentation/9.1/refman/parameters.html#sec:Parameters`](https://www.gurobi.com/documentation/9.1/refman/parameters.html#sec:Parameters).
 
