@@ -93,8 +93,6 @@ solution(sol)
 ```
 
 ## Multiple soltutions MILP
-Let's try to better understand the attributes related to solution pools. Consider again a minimization problem where the parameter settings PoolSearchMode=2 and PoolSolutions=10 have been used.
-
 
 ```r
 library("slam")
